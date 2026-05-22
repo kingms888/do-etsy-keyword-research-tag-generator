@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Etsy Keyword Research & Tag Generator · Listing Optimizer</title>
+    <meta name="description" content="Free Etsy SEO tool: generate high‑relevance tags & keywords for your Etsy listings. Improve visibility and sales with data‑inspired suggestions.">
+    <meta name="keywords" content="etsy seo, keyword generator, etsy tags, listing optimizer, etsy seller tool">
+    <meta name="author" content="EtsySellerTools (demo)">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://demo.etsykeywordtool.example/">
+
+    <!-- Open Graph (optional but nice) -->
+    <meta property="og:title" content="Etsy Keyword Research & Tag Generator">
+    <meta property="og:description" content="Generate optimized Etsy tags & keywords instantly. Built for sellers who want better visibility.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://demo.etsykeywordtool.example/">
+    <meta property="og:locale" content="en_US">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f9f7f4;
+            color: #2e2e2e;
+            line-height: 1.5;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 1.5rem 0.5rem 1rem;
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+
+        header h1 span {
+            background: #f5644b;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            margin-left: 0.3rem;
+        }
+
+        .subhead {
+            color: #5a5a5a;
+            font-size: 1.1rem;
+            margin-top: 0.3rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+            margin: 1.5rem 0;
+        }
+
+        .tool-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1f1f1f;
+        }
+
+        .input-group .hint {
+            font-size: 0.85rem;
+            color: #6b6b6b;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #d4d0cb;
+            border-radius: 40px;
+            font-size: 1rem;
+            background: #fefefe;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        textarea {
+            border-radius: 24px;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #f5644b;
+            box-shadow: 0 0 0 3px rgba(245, 100, 75, 0.15);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 0.8rem 0 0.2rem;
+        }
+
+        .btn {
+            background: #f5644b;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 2px 6px rgba(245, 100, 75, 0.2);
+            flex: 1 0 auto;
+            min-width: 140px;
+        }
+
+        .btn-secondary {
+            background: #eae6e1;
+            color: #2e2e2e;
+            box-shadow: none;
+            flex: 0 1 auto;
+        }
+
+        .btn-secondary:hover {
+            background: #d6d0c9;
+        }
+
+        .btn:hover {
+            background: #e04e36;
+            transform: scale(0.98);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .results-area {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .result-box {
+            background: #f3f0ec;
+            border-radius: 20px;
+            padding: 1rem 1.4rem;
+        }
+
+        .result-box h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #4b4b4b;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .tag-item {
+            background: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid #d4d0cb;
+            color: #1e1e1e;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.8rem;
+        }
+
+        .keyword-item {
+            background: transparent;
+            padding: 0.2rem 0;
+            font-size: 0.95rem;
+            color: #2e2e2e;
+            border-bottom: 1px dashed #cbc4bc;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #b9b2a9;
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: #3a3a3a;
+            transition: 0.1s;
+        }
+
+        .copy-btn:hover {
+            background: #e2dbd4;
+        }
+
+        .ad-placeholder {
+            background: #f3f0ec;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            margin: 1.8rem 0 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border: 1px dashed #cbc4bc;
+        }
+
+        .ad-placeholder .ad-text {
+            font-size: 0.9rem;
+            color: #5a5a5a;
+        }
+
+        .ad-placeholder .ad-badge {
+            background: #d4d0cb;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #2e2e2e;
+        }
+
+        .affiliate-section {
+            background: #f3f0ec;
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .affiliate-section p {
+            font-size: 0.95rem;
+        }
+
+        .affiliate-link {
+            background: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #1e1e1e;
+            font-weight: 500;
+            border: 1px solid #cbc4bc;
+            transition: 0.1s;
+        }
+
+        .affiliate-link:hover {
+            background: #eae6e1;
+        }
+
+        .privacy-note {
+            font-size: 0.8rem;
+            color: #6b6b6b;
+            text-align: center;
+            padding: 1.5rem 0.5rem 0.8rem;
+            border-top: 1px solid #e0dbd5;
+            margin-top: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #7a7a7a;
+            padding: 1rem 0 0.5rem;
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.6rem;
+            }
+            .tool-card {
+                padding: 1.2rem 1rem;
+            }
+            .btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>
+            🔍 Etsy Tag Lab
+            <span>beta</span>
+        </h1>
+        <div class="subhead">Keyword research & tag generator for Etsy sellers</div>
+    </header>
+
+    <!-- Main tool card -->
+    <div class="tool-card">
+        <div class="tool-grid">
+            <div class="input-group">
+                <label for="productInput">📦 Product title or short description</label>
+                <div class="hint">e.g. "Handmade wool beanie with pom pom"</div>
+                <textarea id="productInput" placeholder="Example: Personalized leather journal, A5, vintage style, 200 pages" rows="2">Handmade wool beanie with pom pom</textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="seedInput">✨ Seed words (optional, comma separated)</label>
+                <div class="hint">Add your own niche words, e.g. "winter, gift, unisex"</div>
+                <input type="text" id="seedInput" placeholder="winter, cozy, christmas gift" value="winter, cozy">
+            </div>
+
+            <div class="button-group">
+                <button class="btn" id="generateBtn">⚡ Generate tags & keywords</button>
+                <button class="btn btn-secondary" id="clearBtn">Clear</button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-area" id="resultsArea">
+            <div class="result-box">
+                <h3>🏷️ Suggested Etsy Tags (13)</h3>
+                <div class="tag-cloud" id="tagCloud">
+                    <span class="tag-item">wool beanie</span>
+                    <span class="tag-item">handmade hat</span>
+                    <span class="tag-item">winter pom pom</span>
+                    <span class="tag-item">cozy beanie</span>
+                    <span class="tag-item">knit cap</span>
+                    <span class="tag-item">gift for her</span>
+                    <span class="tag-item">unisex hat</span>
+                    <span class="tag-item">cold weather</span>
+                    <span class="tag-item">christmas gift</span>
+                    <span class="tag-item">organic wool</span>
+                    <span class="tag-item">boho style</span>
+                    <span class="tag-item">ear flap hat</span>
+                    <span class="tag-item">festive beanie</span>
+                </div>
+                <div style="margin-top: 0.6rem; display: flex; justify-content: flex-end;">
+                    <button class="copy-btn" id="copyTagsBtn">📋 Copy tags</button>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <h3>🔑 High‑value Keywords</h3>
+                <div class="keyword-list" id="keywordList">
+                    <span class="keyword-item">winter hat</span>
+                    <span class="keyword-item">pom pom beanie</span>
+                    <span class="keyword-item">hand knit</span>
+                    <span class="keyword-item">wool cap</span>
+                    <span class="keyword-item">cozy winter</span>
+                    <span class="keyword-item">gift for men</span>
+                    <span class="keyword-item">festive hat</span>
+                    <span class="keyword-item">ear flap</span>
+                    <span class="keyword-item">organic</span>
+                    <span class="keyword-item">boho beanie</span>
+                </div>
+                <div style="margin-top: 0.6rem; display: flex; justify-content: flex-end;">
+                    <button class="copy-btn" id="copyKeywordsBtn">📋 Copy keywords</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad placeholder (visible) -->
+    <div class="ad-placeholder" aria-label="advertisement placeholder">
+        <div>
+            <span class="ad-badge">📌 SPONSORED</span>
+            <span class="ad-text" style="margin-left: 0.6rem;">Boost your Etsy shop — try <strong>eRank</strong> or <strong>Marmalead</strong> for deeper SEO</span>
+        </div>
+        <div style="font-size:0.8rem; color:#7a7a7a;">[ad placeholder]</div>
+    </div>
+
+    <!-- Affiliate / resource section -->
+    <div class="affiliate-section">
+        <p><strong>📘 Seller resources</strong> · Guides, tools &amp; templates to grow your Etsy shop.</p>
+        <a href="#" class="affiliate-link" id="affiliateLink" target="_blank" rel="noopener noreferrer">🔗 Visit Etsy SEO guide →</a>
+    </div>
+
+    <!-- Privacy notice -->
+    <div class="privacy-note">
+        🔒 <strong>Privacy:</strong> We may count anonymous events to improve this tool. No personal data collected.
+        <span style="display: block; margin-top: 0.3rem; font-size: 0.7rem;">reportEvent() sends anonymous metrics if endpoint is configured.</span>
+    </div>
+
+    <footer>
+        <span>Etsy Keyword Research & Tag Generator · for sellers, by sellers</span>
+    </footer>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+
+        // ---------- lightweight event reporter ----------
+        window.reportEvent = function(name, payload) {
+            if (typeof window.ORGANISM_METRICS_ENDPOINT === 'string' && window.ORGANISM_METRICS_ENDPOINT.length > 0) {
+                try {
+                    const body = JSON.stringify({ event: name, payload: payload || {}, timestamp: Date.now() });
+                    fetch(window.ORGANISM_METRICS_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: body,
+                        keepalive: true
+                    }).catch(() => {});
+                } catch (e) {
+                    // silent
+                }
+            }
+        };
+
+        // ---------- DOM refs ----------
+        const productInput = document.getElementById('productInput');
+        const seedInput = document.getElementById('seedInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const tagCloud = document.getElementById('tagCloud');
+        const keywordList = document.getElementById('keywordList');
+        const copyTagsBtn = document.getElementById('copyTagsBtn');
+        const copyKeywordsBtn = document.getElementById('copyKeywordsBtn');
+
+        // ---------- smart keyword/tag generation ----------
+        function generateTagsAndKeywords(productText, seedWords) {
+            // Normalize and split
+            const words = productText.toLowerCase().replace(/[^a-z0-9\s-]/g, '').split(/\s+/).filter(w => w.length > 1);
+            const seeds = seedWords.toLowerCase().split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+            // Combine base word set (product words + seeds)
+            let baseSet = new Set([...words, ...seeds]);
+            // Remove very generic words (stop words)
+            const stopWords = new Set(['the','a','an','and','or','for','with','to','in','on','of','is','it','by','as','at','be','this','that','from']);
+            baseSet = new Set([...baseSet].filter(w => !stopWords.has(w) && w.length > 1));
+
+            // Build tag phrases (bigrams & single words)
+            let tags = [];
+            // 1. bigrams from product + seeds
+            const allTokens = [...words, ...seeds];
+            for (let i = 0; i < allTokens.length - 1; i++) {
+                const bigram = (allTokens[i] + ' ' + allTokens[i+1]).trim();
+                if (bigram.split(' ').every(t => t.length > 1)) {
+                    tags.push(bigram);
+                }
+            }
+            // 2. single words from baseSet (if not too generic)
+            baseSet.forEach(w => {
+                if (w.length > 2 && !['hat','cap','bag','gift','wool','winter','cozy','boho','knit','pom','ear'].includes(w) === false) {
+                    // we still add many single words
+                }
+                tags.push(w);
+            });
+
+            // 3. add seed-based phrases
+            seeds.forEach(s => {
+                if (s.length > 2) tags.push(s + ' style');
+                if (s.includes('gift')) tags.push(s);
+            });
+
+            // 4. enrich with common Etsy tag patterns
+            const productNouns = words.filter(w => ['hat','beanie','cap','scarf','gloves','bag','journal','mug','art','print','candle','soap','jewelry','ring','necklace'].includes(w));
+            productNouns.forEach(n => {
+                tags.push('handmade ' + n);
+                tags.push('gift ' + n);
+                tags.push('organic ' + n);
+            });
+
+            // 5. add some generic high‑volume Etsy tags (safe, no scraping)
+            const etsyClassic = ['gift for her','gift for him','unisex','stocking stuffer','christmas','holiday','boho','vintage','personalized','custom','minimalist','eco friendly','artisan'];
+            tags.push(...etsyClassic);
+
+            // 6. add seed words as single tags
+            seeds.forEach(s => tags.push(s));
+
+            // deduplicate and clean
+            const uniqueTags = [...new Set(tags.map(t => t.trim().toLowerCase()).filter(t => t.length > 2))];
+            // limit to 13 tags (etsy max is 13)
+            const finalTags = uniqueTags.slice(0, 13);
+
+            // generate keyword list (longer, more variations)
+            let keywords = [];
+            // from tags
+            finalTags.forEach(t => keywords.push(t));
+            // bigrams from all tokens
+            const tokenList = [...words, ...seeds];
+            for (let i = 0; i < tokenList.length - 1; i++) {
+                const bigram = (tokenList[i] + ' ' + tokenList[i+1]).trim();
+                if (bigram.split(' ').every(t => t.length > 1) && !keywords.includes(bigram)) {
+                    keywords.push(bigram);
+                }
+            }
+            // add more single words
+            baseSet.forEach(w => {
+                if (w.length > 2 && !keywords.includes(w)) keywords.push(w);
+            });
+            // add seed phrases
+            seeds.forEach(s => {
+                if (!keywords.includes(s)) keywords.push(s);
+                if (!keywords.includes(s + ' hat')) keywords.push(s + ' hat');
+            });
+            // add some high‑value keyword phrases
+            const extraKeywords = ['best ' + (words[0] || 'gift'), 'unique ' + (words[0] || 'present'), 'top rated', 'under 50', 'etsy favorite', 'trending'];
+            keywords.push(...extraKeywords);
+
+            // deduplicate, limit length
+            const uniqueKeywords = [...new Set(keywords.map(k => k.trim().toLowerCase()).filter(k => k.length > 2))];
+            const finalKeywords = uniqueKeywords.slice(0, 20);
+
+            return { tags: finalTags, keywords: finalKeywords };
+        }
+
+        // ---------- render results ----------
+        function renderResults(tags, keywords) {
+            // clear
+            tagCloud.innerHTML = '';
+            keywordList.innerHTML = '';
+
+            tags.forEach(t => {
+                const span = document.createElement('span');
+                span.className = 'tag-item';
+                span.textContent = t;
+                tagCloud.appendChild(span);
+            });
+
+            keywords.forEach(k => {
+                const span = document.createElement('span');
+                span.className = 'keyword-item';
+                span.textContent = k;
+                keywordList.appendChild(span);
+            });
+        }
+
+        // ---------- main generate action ----------
+        function performGenerate() {
+            const productRaw = productInput.value.trim() || 'handmade wool beanie';
+            const seedRaw = seedInput.value.trim() || 'winter, cozy';
+
+            const { tags, keywords } = generateTagsAndKeywords(productRaw, seedRaw);
+            renderResults(tags, keywords);
+
+            // report anonymous event
+            window.reportEvent('generate_clicked', {
+                productLength: productRaw.length,
+                seedCount: seedRaw.split(',').length,
+                tagCount: tags.length,
+                keywordCount: keywords.length
+            });
+        }
+
+        // ---------- copy helpers ----------
+        function copyTextFromContainer(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const texts = Array.from(container.children).map(el => el.textContent.trim()).filter(t => t.length > 0);
+            const copyString = texts.join(', ');
+            if (!copyString) return;
+            navigator.clipboard.writeText(copyString).then(() => {
+                // optional small feedback (no alert)
+                window.reportEvent('copy_used', { container: containerId, length: texts.length });
+            }).catch(() => {});
+        }
+
+        // ---------- event binding ----------
+        generateBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            performGenerate();
+        });
+
+        clearBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            productInput.value = '';
+            seedInput.value = '';
+            // reset to default example? we set placeholder but keep empty? better clear and set default example.
+            productInput.value = 'Handmade wool beanie with pom pom';
+            seedInput.value = 'winter, cozy';
+            performGenerate(); // re-generate with default
+            window.reportEvent('clear_used', {});
+        });
+
+        copyTagsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            copyTextFromContainer('tagCloud');
+        });
+
+        copyKeywordsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            copyTextFromContainer('keywordList');
+        });
+
+        // affiliate link placeholder (no real tracking)
+        document.getElementById('affiliateLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.reportEvent('affiliate_click', { resource: 'etsy seo guide' });
+            // optionally open a demo link (non functional)
+            alert('[Demo] Affiliate link — Etsy SEO guide (placeholder)');
+        });
+
+        // ---------- initial load: generate from default values ----------
+        window.addEventListener('DOMContentLoaded', function() {
+            performGenerate();
+            window.reportEvent('page_view', { tool: 'etsy keyword generator' });
+        });
+
+        // also if user types fast? we keep manual generation only
+
+        // expose for debugging
+        window.__demoGenerate = performGenerate;
+    })();
+</script>
+
+<!-- ORGANISM_METRICS_ENDPOINT example (not set) – no tracking unless defined -->
+<!-- To enable anonymous metrics, set window.ORGANISM_METRICS_ENDPOINT = 'https://your-endpoint.example.com/metrics' -->
+</body>
+</html>
